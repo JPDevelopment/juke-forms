@@ -1,7 +1,7 @@
 import React from 'react';
 import FilterableArtistsContainer from '../containers/FilterableArtistsContainer';
 import Artists from './Artists';
-
+import PlaylistContainer from '../containers/PlaylistContainer';
 const FilterInput = (props) => {
 
   return (
