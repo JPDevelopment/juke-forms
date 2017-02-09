@@ -1,6 +1,6 @@
 import React from 'react';
 import NewPlaylist from '../components/NewPlaylist';
-
+import axios from 'axios';
 export default class PlaylistContainer extends React.Component{
   constructor(props){
     super(props);
@@ -20,8 +20,18 @@ export default class PlaylistContainer extends React.Component{
   handleSubmit(evt){
     evt.preventDefault();
     console.log(this.state.inputValue);
+    const playlistName = this.state.inputValue;
     this.setState({
       inputValue: ''
+    });
+    this.createPlaylist(playlistName);
+  }
+
+  createPlaylist(playlistName){
+    axios.post('/api/playlists', { name: playlistName })
+    .then(res => res.data)
+    .then(result => {
+      console.log(result) // response json from the server!
     });
   }
 

@@ -28929,6 +28929,10 @@
 	
 	var _NewPlaylist2 = _interopRequireDefault(_NewPlaylist);
 	
+	var _axios = __webpack_require__(234);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28965,8 +28969,19 @@
 	    value: function handleSubmit(evt) {
 	      evt.preventDefault();
 	      console.log(this.state.inputValue);
+	      var playlistName = this.state.inputValue;
 	      this.setState({
 	        inputValue: ''
+	      });
+	      this.createPlaylist(playlistName);
+	    }
+	  }, {
+	    key: 'createPlaylist',
+	    value: function createPlaylist(playlistName) {
+	      _axios2.default.post('/api/playlists', { name: playlistName }).then(function (res) {
+	        return res.data;
+	      }).then(function (result) {
+	        console.log(result); // response json from the server!
 	      });
 	    }
 	  }, {
@@ -29024,10 +29039,10 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group' },
-	          !props.value.length ? _react2.default.createElement(
+	          props.isButtonDisabled() ? _react2.default.createElement(
 	            'div',
 	            { className: 'alert alert-warning' },
-	            'Please enter a name'
+	            'Playlist name must have 1 to 16 characters'
 	          ) : null,
 	          _react2.default.createElement(
 	            'label',

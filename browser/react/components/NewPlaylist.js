@@ -8,8 +8,8 @@ return (
     <fieldset>
       <legend>New Playlist</legend>
       <div className="form-group">
-        {!props.value.length ?
-          <div className="alert alert-warning">Please enter a name</div> : null}
+        {props.isButtonDisabled() ?
+          <div className="alert alert-warning">Playlist name must have 1 to 16 characters</div> : null}
 
         <label className="col-xs-2 control-label">Name</label>
         <div className="col-xs-10">
