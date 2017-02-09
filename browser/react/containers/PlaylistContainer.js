@@ -7,6 +7,7 @@ export default class PlaylistContainer extends React.Component{
     this.state = {inputValue: ''};
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.isButtonDisabled = this.isButtonDisabled.bind(this);
   }
 
   handleInput (evt) {
@@ -23,9 +24,17 @@ export default class PlaylistContainer extends React.Component{
       inputValue: ''
     });
   }
+
+  isButtonDisabled(){
+    if(this.state.inputValue.length === 0 || this.state.inputValue.length > 16){
+      return true;
+    }
+    return false;
+  }
+
   render(){
     return (
-      <NewPlaylist valgue={this.state.inputValue} handleInput={this.handleInput} handleSubmit={this.handleSubmit} />
+      <NewPlaylist isButtonDisabled={this.isButtonDisabled} value={this.state.inputValue} handleInput={this.handleInput} handleSubmit={this.handleSubmit} />
     );
   }
 }

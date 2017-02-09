@@ -28948,6 +28948,7 @@
 	    _this.state = { inputValue: '' };
 	    _this.handleInput = _this.handleInput.bind(_this);
 	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.isButtonDisabled = _this.isButtonDisabled.bind(_this);
 	    return _this;
 	  }
 	
@@ -28969,9 +28970,17 @@
 	      });
 	    }
 	  }, {
+	    key: 'isButtonDisabled',
+	    value: function isButtonDisabled() {
+	      if (this.state.inputValue.length === 0 || this.state.inputValue.length > 16) {
+	        return true;
+	      }
+	      return false;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(_NewPlaylist2.default, { valgue: this.state.inputValue, handleInput: this.handleInput, handleSubmit: this.handleSubmit });
+	      return _react2.default.createElement(_NewPlaylist2.default, { isButtonDisabled: this.isButtonDisabled, value: this.state.inputValue, handleInput: this.handleInput, handleSubmit: this.handleSubmit });
 	    }
 	  }]);
 	
@@ -29015,6 +29024,11 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'form-group' },
+	          !props.value.length ? _react2.default.createElement(
+	            'div',
+	            { className: 'alert alert-warning' },
+	            'Please enter a name'
+	          ) : null,
 	          _react2.default.createElement(
 	            'label',
 	            { className: 'col-xs-2 control-label' },
@@ -29034,7 +29048,7 @@
 	            { className: 'col-xs-10 col-xs-offset-2' },
 	            _react2.default.createElement(
 	              'button',
-	              { type: 'submit', className: 'btn btn-success' },
+	              { disabled: props.isButtonDisabled(), type: 'submit', className: 'btn btn-success' },
 	              'Create Playlist'
 	            )
 	          )
