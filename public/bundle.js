@@ -106,6 +106,7 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/artists/:artistId/songs', component: _Songs2.default })
 	    ),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/newPlaylist', component: _PlaylistContainer2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'playlists/:playlistId', component: Playlist }),
 	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/albums' })
 	  )
 	), document.getElementById('app'));
@@ -26612,13 +26613,17 @@
 	
 	var _Album2 = _interopRequireDefault(_Album);
 	
-	var _Sidebar = __webpack_require__(264);
+	var _Sidebar = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../components/Sidebar\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var _Sidebar2 = _interopRequireDefault(_Sidebar);
 	
 	var _Player = __webpack_require__(265);
 	
 	var _Player2 = _interopRequireDefault(_Player);
+	
+	var _PlaylistContainer = __webpack_require__(269);
+	
+	var _PlaylistContainer2 = _interopRequireDefault(_PlaylistContainer);
 	
 	var _utils = __webpack_require__(266);
 	
@@ -26656,7 +26661,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
-	      Promise.all([_axios2.default.get('/api/albums/'), _axios2.default.get('/api/artists/')]).then(function (res) {
+	      Promise.all([_axios2.default.get('/api/albums/'), _axios2.default.get('/api/artists/'), _axios2.default.get('/api/playlists')]).then(function (res) {
 	        return res.map(function (r) {
 	          return r.data;
 	        });
@@ -26673,10 +26678,11 @@
 	    }
 	  }, {
 	    key: 'onLoad',
-	    value: function onLoad(albums, artists) {
+	    value: function onLoad(albums, artists, playlists) {
 	      this.setState({
 	        albums: (0, _utils.convertAlbums)(albums),
-	        artists: artists
+	        artists: artists,
+	        playlists: playlists
 	      });
 	    }
 	  }, {
@@ -26770,6 +26776,19 @@
 	      this.setState({ selectedArtist: artist });
 	    }
 	  }, {
+	    key: 'createPlaylist',
+	    value: function createPlaylist(playlistName) {
+	      var _this5 = this;
+	
+	      _axios2.default.post('/api/playlists', { name: playlistName }).then(function (res) {
+	        return res.data;
+	      }).then(function (playlist) {
+	        _this5.setState({
+	          playlists: [].concat(_toConsumableArray(_this5.state.playlists), [playlist])
+	        });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	
@@ -26777,7 +26796,8 @@
 	        toggleOne: this.toggleOne,
 	        toggle: this.toggle,
 	        selectAlbum: this.selectAlbum,
-	        selectArtist: this.selectArtist
+	        selectArtist: this.selectArtist,
+	        createPlaylist: this.createPlaylist
 	      });
 	
 	      return _react2.default.createElement(
@@ -26786,7 +26806,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-xs-2' },
-	          _react2.default.createElement(_Sidebar2.default, null)
+	          _react2.default.createElement(_Sidebar2.default, { playlists: this.state.playlists })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -28317,7 +28337,8 @@
 	  currentSong: {},
 	  currentSongList: [],
 	  isPlaying: false,
-	  progress: 0
+	  progress: 0,
+	  playlists: []
 	};
 	
 	exports.default = initialState;
@@ -28582,81 +28603,7 @@
 	exports.default = Songs;
 
 /***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRouter = __webpack_require__(178);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Sidebar = function Sidebar(props) {
-	
-	  return _react2.default.createElement(
-	    'sidebar',
-	    null,
-	    _react2.default.createElement('img', { src: 'juke.svg', className: 'logo' }),
-	    _react2.default.createElement(
-	      'section',
-	      null,
-	      _react2.default.createElement(
-	        'h4',
-	        { className: 'menu-item' },
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/albums' },
-	          'ALBUMS'
-	        )
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'section',
-	      null,
-	      _react2.default.createElement(
-	        'h4',
-	        { className: 'menu-item' },
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/artists' },
-	          'ARTISTS'
-	        )
-	      )
-	    ),
-	    _react2.default.createElement('hr', null),
-	    _react2.default.createElement(
-	      'section',
-	      null,
-	      _react2.default.createElement(
-	        'h4',
-	        { className: 'text-muted' },
-	        'PLAYLISTS'
-	      ),
-	      _react2.default.createElement(
-	        'h4',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { className: 'btn btn-primary btn-block', to: '/newPlaylist' },
-	          _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus' }),
-	          ' PLAYLIST'
-	        )
-	      )
-	    )
-	  );
-	};
-	
-	exports.default = Sidebar;
-
-/***/ },
+/* 264 */,
 /* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28969,20 +28916,11 @@
 	    value: function handleSubmit(evt) {
 	      evt.preventDefault();
 	      console.log(this.state.inputValue);
-	      var playlistName = this.state.inputValue;
+	      var addPlaylist = this.props.createPlaylist;
 	      this.setState({
 	        inputValue: ''
 	      });
-	      this.createPlaylist(playlistName);
-	    }
-	  }, {
-	    key: 'createPlaylist',
-	    value: function createPlaylist(playlistName) {
-	      _axios2.default.post('/api/playlists', { name: playlistName }).then(function (res) {
-	        return res.data;
-	      }).then(function (result) {
-	        console.log(result); // response json from the server!
-	      });
+	      addPlaylist(this.state.inputValue);
 	    }
 	  }, {
 	    key: 'isButtonDisabled',

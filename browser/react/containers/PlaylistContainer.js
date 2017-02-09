@@ -20,20 +20,13 @@ export default class PlaylistContainer extends React.Component{
   handleSubmit(evt){
     evt.preventDefault();
     console.log(this.state.inputValue);
-    const playlistName = this.state.inputValue;
+    const addPlaylist = this.props.createPlaylist;
     this.setState({
       inputValue: ''
     });
-    this.createPlaylist(playlistName);
+    addPlaylist(this.state.inputValue);
   }
 
-  createPlaylist(playlistName){
-    axios.post('/api/playlists', { name: playlistName })
-    .then(res => res.data)
-    .then(result => {
-      console.log(result) // response json from the server!
-    });
-  }
 
   isButtonDisabled(){
     if(this.state.inputValue.length === 0 || this.state.inputValue.length > 16){

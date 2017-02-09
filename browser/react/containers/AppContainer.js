@@ -8,6 +8,7 @@ import Albums from '../components/Albums.js';
 import Album from '../components/Album';
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
+import PlaylistContainer from './PlaylistContainer';
 
 import { convertAlbum, convertAlbums, convertSong, skip } from '../utils';
 
@@ -30,10 +31,11 @@ export default class AppContainer extends Component {
     Promise
       .all([
         axios.get('/api/albums/'),
-        axios.get('/api/artists/')
+        axios.get('/api/artists/'),
+        axios.get('/api/playlists')
       ])
       .then(res => res.map(r => r.data))
-      .then(data => this.onLoad(...data));
+      .then(data => this.onLoad(...data))
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -41,10 +43,11 @@ export default class AppContainer extends Component {
       this.setProgress(AUDIO.currentTime / AUDIO.duration));
   }
 
-  onLoad (albums, artists) {
+  onLoad (albums, artists, playlists) {
     this.setState({
       albums: convertAlbums(albums),
-      artists: artists
+      artists: artists,
+      playlists: playlists
     });
   }
 
@@ -124,19 +127,30 @@ export default class AppContainer extends Component {
     this.setState({ selectedArtist: artist });
   }
 
+  createPlaylist(playlistName){
+    axios.post('/api/playlists', { name: playlistName })
+    .then(res => res.data)
+    .then(playlist => {
+      this.setState({
+        playlists: [...this.state.playlists, playlist]
+      });
+    });
+  }
+
   render () {
 
     const props = Object.assign({}, this.state, {
       toggleOne: this.toggleOne,
       toggle: this.toggle,
       selectAlbum: this.selectAlbum,
-      selectArtist: this.selectArtist
+      selectArtist: this.selectArtist,
+      createPlaylist: this.createPlaylist
     });
 
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
-          <Sidebar />
+          <Sidebar playlists={this.state.playlists}/>
         </div>
         <div className="col-xs-10">
         {
